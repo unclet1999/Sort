@@ -1,7 +1,7 @@
 import time
 from threading import Thread
 
-
+#**********************************************READ_FROM_FILE***********************************************************
 def read_from_file(file_name):
     for i in range(1,1000,100):
         min_num=i
@@ -15,7 +15,7 @@ def read_from_file(file_name):
                     my_list.append(reader_int)
                 reader=f.readline()
         yield my_list
-
+#**********************************************WRITE_TO_FILE************************************************************
 
 def write_to_file(elements,alg_name):
     direct=alg_name+".txt"
@@ -23,7 +23,7 @@ def write_to_file(elements,alg_name):
         for i in elements:
             f.write(str(i)+"\n")
 
-
+#**************************************************BUBBLE_SORT**********************************************************
 def bubble_sort(elements):
     for i in range(0,len(elements)):
         for j in range(0,len(elements)-i-1):
@@ -34,7 +34,7 @@ def bubble_sort(elements):
                 continue
     write_to_file(elements,"Bubble_Sort")
 
-
+#*************************************************SELECTION_SORT********************************************************
 def selection_sort(elements):
     for i in range(0, len(elements)):
         min_index = i
@@ -44,7 +44,7 @@ def selection_sort(elements):
 
         elements[i], elements[min_index] = elements[min_index], elements[i]
     write_to_file(elements, "Selection_Sort")
-
+#**************************************************MERGE_SORT***********************************************************
 def merge_sort(elements):
     if(len(elements)>1):
         mid = len(elements)//2
@@ -69,7 +69,46 @@ def merge_sort(elements):
             elements[k]=R[j]
             j+=1
             k+=1
+    write_to_file(elements, "merge_sort")
 
+#********************************************Function_related to comb_sort**********************************************
+def getNextGap(gap):
+    # Shrink gap by Shrink factor
+    gap = (gap * 10) / 13
+    if gap < 1:
+        return 1
+    return gap
+#**************************************************COMB_SORT************************************************************
+def comb_sort(elements):
+    n = len(elements)
+
+    # Initialize gap
+    gap = n
+
+    # Initialize swapped as true to make sure that
+    # loop runs
+    swapped = True
+
+    # Keep running while gap is more than 1 and last
+    # iteration caused a swap
+    while gap != 1 or swapped == 1:
+
+        # Find next gap
+        gap = int(getNextGap(gap))
+
+        # Initialize swapped as false so that we can
+        # check if swap happened or not
+        swapped = False
+
+        # Compare all elements with current gap
+        for i in range(0, n - gap):
+            if elements[i] > elements[i + gap]:
+                elements[i], elements[i + gap] = elements[i + gap], elements[i]
+                swapped = True
+    write_to_file(elements, "Comb_sort")
+
+
+#***********************************************ITERATE_AND_BUBBLE_SORT*************************************************
 
 def iterate_and_bubble_sort():
     global init_time
@@ -80,7 +119,7 @@ def iterate_and_bubble_sort():
         duration=final_time-init_time
         f.write("Algorithm <Bubble_Sort> took "+str(duration)+" seconds to finish\n")
 
-
+#**********************************************ITERATE_AND_MERGE********************************************************
 def iterate_and_merge_sort():
     global init_time
     for elements in read_from_file("Random.txt"):
@@ -90,7 +129,7 @@ def iterate_and_merge_sort():
         final_time = time.perf_counter()
         duration = final_time-init_time
         f.write("Algorithm <Merge_Sort> took "+str(duration)+" seconds to finish\n")
-
+#***********************************************ITERATE_AND_SELECTION_SORT**********************************************
 def iterate_and_selection_sort():
     global init_time
     for elements in read_from_file("Random.txt"):
@@ -99,8 +138,17 @@ def iterate_and_selection_sort():
         final_time=time.perf_counter()
         duration=final_time-init_time
         f.write("Algorithm <Selection_Sort> took "+str(duration)+" seconds to finish\n")
+#********************************************ITERATE_AND_COMB_SORT******************************************************
+def iterate_and_comb_sort():
+    global init_time
+    for elements in read_from_file("Random.txt"):
+        comb_sort(elements)
+    with open("duration.txt",mode="a") as f:
+        final_time=time.perf_counter()
+        duration=final_time-init_time
+        f.write("Algorithm <Comb_sort> took "+str(duration)+" seconds to finish\n")
 
-
+#***************************************************MAIN_FUNCTION*******************************************************
 def main():
     global init_time
     init_time=time.perf_counter()
@@ -110,6 +158,8 @@ def main():
     t2.start()
     t3 = Thread(target=iterate_and_merge_sort)
     t3.start()
+    t4=Thread(target=iterate_and_comb_sort())
+    t4.start()
 
 if __name__ == '__main__':
     main()
