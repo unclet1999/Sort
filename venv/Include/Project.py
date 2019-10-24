@@ -22,7 +22,25 @@ def write_to_file(elements,alg_name):
     with open(direct,mode="a") as f:
         for i in elements:
             f.write(str(i)+"\n")
+            
+#______________________________________________shellSort
 
+def shellSort(elements):  
+    n = len(elements) 
+    gap = n//2
+
+    while gap > 0: 
+        for i in range(gap,n): 
+            temp = elements[i] 
+            j = i 
+            while  j >= gap and elements[j-gap] >temp: 
+                elements[j] = elements[j-gap] 
+                j -= gap 
+            elements[j] = temp 
+        gap //= 2
+
+    write_to_file(elements, "shellSort")
+    
 #**************************************************BUBBLE_SORT**********************************************************
 def bubble_sort(elements):
     for i in range(0,len(elements)):
@@ -107,7 +125,19 @@ def comb_sort(elements):
                 swapped = True
     write_to_file(elements, "Comb_sort")
 
+#______________________________________________iterateAndShellSort
 
+def iterateAndShellSort():
+    global init_time
+
+    for elements in read_from_file("random.txt"):
+        shellSort(elements)
+
+    with open("duration.txt",mode="a") as f:
+        final_time=time.perf_counter()
+        duration=final_time-init_time
+        f.write("Algorithm <shellSort> took "+str(duration)+" seconds to finish\n")
+        
 #***********************************************ITERATE_AND_BUBBLE_SORT*************************************************
 
 def iterate_and_bubble_sort():
@@ -152,14 +182,21 @@ def iterate_and_comb_sort():
 def main():
     global init_time
     init_time=time.perf_counter()
+    
     t1=Thread(target=iterate_and_bubble_sort)
     t1.start()
+    
     t2 = Thread(target=iterate_and_selection_sort)
     t2.start()
+    
     t3 = Thread(target=iterate_and_merge_sort)
     t3.start()
+    
     t4=Thread(target=iterate_and_comb_sort())
     t4.start()
-
+    
+    t5 = Thread(target = iterateAndShellSort())
+    t5.start()
+    
 if __name__ == '__main__':
     main()
