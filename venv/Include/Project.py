@@ -180,8 +180,19 @@ def iterate_and_comb_sort():
 
 #***************************************************MAIN_FUNCTION*******************************************************
 def main():
-    global init_time
+    global init_time           # age az multiprocessing estefade konim bayad init_time ro az halat global dar biarim
     init_time=time.perf_counter()
+    #proc1 = Process(target=iterateAndShellSort,)
+    
+    #proc2 = Process(target=iterate_and_comb_sort,)
+    
+    #proc1.start()
+    #proc2.start() 
+
+    #proc1.join()
+    #proc2.join()
+
+    print("Done!")
     
     t1=Thread(target=iterate_and_bubble_sort)
     t1.start()
