@@ -1,7 +1,10 @@
 import time
 from threading import Thread
 
+
 #**********************************************READ_FROM_FILE***********************************************************
+
+
 def read_from_file(file_name):
     for i in range(1,1000,100):
         min_num=i
@@ -15,33 +18,41 @@ def read_from_file(file_name):
                     my_list.append(reader_int)
                 reader=f.readline()
         yield my_list
+
+
 #**********************************************WRITE_TO_FILE************************************************************
+
 
 def write_to_file(elements,alg_name):
     direct=alg_name+".txt"
     with open(direct,mode="a") as f:
         for i in elements:
             f.write(str(i)+"\n")
-            
+
+
 #______________________________________________shellSort
 
-def shellSort(elements):  
-    n = len(elements) 
+
+def shellSort(elements):
+    n = len(elements)
     gap = n//2
 
-    while gap > 0: 
-        for i in range(gap,n): 
-            temp = elements[i] 
-            j = i 
-            while  j >= gap and elements[j-gap] >temp: 
-                elements[j] = elements[j-gap] 
-                j -= gap 
-            elements[j] = temp 
+    while gap > 0:
+        for i in range(gap,n):
+            temp = elements[i]
+            j = i
+            while  j >= gap and elements[j-gap] >temp:
+                elements[j] = elements[j-gap]
+                j -= gap
+            elements[j] = temp
         gap //= 2
 
     write_to_file(elements, "shellSort")
-    
+
+
 #**************************************************BUBBLE_SORT**********************************************************
+
+
 def bubble_sort(elements):
     for i in range(0,len(elements)):
         for j in range(0,len(elements)-i-1):
@@ -52,7 +63,10 @@ def bubble_sort(elements):
                 continue
     write_to_file(elements,"Bubble_Sort")
 
+
 #*************************************************SELECTION_SORT********************************************************
+
+
 def selection_sort(elements):
     for i in range(0, len(elements)):
         min_index = i
@@ -62,7 +76,11 @@ def selection_sort(elements):
 
         elements[i], elements[min_index] = elements[min_index], elements[i]
     write_to_file(elements, "Selection_Sort")
+
+
 #**************************************************MERGE_SORT***********************************************************
+
+
 def merge_sort(elements):
     if(len(elements)>1):
         mid = len(elements)//2
@@ -87,16 +105,22 @@ def merge_sort(elements):
             elements[k]=R[j]
             j+=1
             k+=1
-    write_to_file(elements, "merge_sort")
+
 
 #********************************************Function_related to comb_sort**********************************************
+
+
 def getNextGap(gap):
     # Shrink gap by Shrink factor
     gap = (gap * 10) / 13
     if gap < 1:
         return 1
     return gap
+
+
 #**************************************************COMB_SORT************************************************************
+
+
 def comb_sort(elements):
     n = len(elements)
 
@@ -125,7 +149,9 @@ def comb_sort(elements):
                 swapped = True
     write_to_file(elements, "Comb_sort")
 
+
 #______________________________________________iterateAndShellSort
+
 
 def iterateAndShellSort():
     global init_time
@@ -137,8 +163,10 @@ def iterateAndShellSort():
         final_time=time.perf_counter()
         duration=final_time-init_time
         f.write("Algorithm <shellSort> took "+str(duration)+" seconds to finish\n")
-        
+
+
 #***********************************************ITERATE_AND_BUBBLE_SORT*************************************************
+
 
 def iterate_and_bubble_sort():
     global init_time
@@ -149,7 +177,10 @@ def iterate_and_bubble_sort():
         duration=final_time-init_time
         f.write("Algorithm <Bubble_Sort> took "+str(duration)+" seconds to finish\n")
 
+
 #**********************************************ITERATE_AND_MERGE********************************************************
+
+
 def iterate_and_merge_sort():
     global init_time
     for elements in read_from_file("Random.txt"):
@@ -159,7 +190,11 @@ def iterate_and_merge_sort():
         final_time = time.perf_counter()
         duration = final_time-init_time
         f.write("Algorithm <Merge_Sort> took "+str(duration)+" seconds to finish\n")
+
+
 #***********************************************ITERATE_AND_SELECTION_SORT**********************************************
+
+
 def iterate_and_selection_sort():
     global init_time
     for elements in read_from_file("Random.txt"):
@@ -168,7 +203,11 @@ def iterate_and_selection_sort():
         final_time=time.perf_counter()
         duration=final_time-init_time
         f.write("Algorithm <Selection_Sort> took "+str(duration)+" seconds to finish\n")
+
+
 #********************************************ITERATE_AND_COMB_SORT******************************************************
+
+
 def iterate_and_comb_sort():
     global init_time
     for elements in read_from_file("Random.txt"):
@@ -178,22 +217,14 @@ def iterate_and_comb_sort():
         duration=final_time-init_time
         f.write("Algorithm <Comb_sort> took "+str(duration)+" seconds to finish\n")
 
+
 #***************************************************MAIN_FUNCTION*******************************************************
+
+
 def main():
-    global init_time           # age az multiprocessing estefade konim bayad init_time ro az halat global dar biarim
+    global init_time
     init_time=time.perf_counter()
-    #proc1 = Process(target=iterateAndShellSort,)
-    
-    #proc2 = Process(target=iterate_and_comb_sort,)
-    
-    #proc1.start()
-    #proc2.start() 
 
-    #proc1.join()
-    #proc2.join()
-
-    print("Done!")
-    
     t1=Thread(target=iterate_and_bubble_sort)
     t1.start()
     
@@ -203,11 +234,12 @@ def main():
     t3 = Thread(target=iterate_and_merge_sort)
     t3.start()
     
-    t4=Thread(target=iterate_and_comb_sort())
+    t4=Thread(target=iterate_and_comb_sort)
     t4.start()
     
-    t5 = Thread(target = iterateAndShellSort())
+    t5 = Thread(target = iterateAndShellSort)
     t5.start()
-    
+
+
 if __name__ == '__main__':
     main()
