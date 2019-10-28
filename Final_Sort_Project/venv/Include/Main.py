@@ -144,6 +144,18 @@ def comb_sort(elements):
                 elements[i], elements[i + gap] = elements[i + gap], elements[i]
                 swapped = True
 
+#-----------------------------------------------------------Insertion Sort-------------------------------------------------
+def insertion_sort(elements):
+    # Traverse through 1 to len(arr)
+    for i in range(1, len(elements)):
+        key = elements[i]
+        j = i - 1
+        while j >= 0 and key < elements[j]:
+            elements[j + 1] = elements[j]
+            j -= 1
+        elements[j + 1] = key
+    write_to_file(elements, "insertionsort")
+    
 #-----------------------------------------------------------Main--------------------------------------------------------
 
 def main():
@@ -153,10 +165,12 @@ def main():
     t2=Sort(shell_sort,"Shell_Sort")
     t3=Sort(comb_sort,"Comb_Sort")
     t4=Sort(selection_sort,"Selection_Sort")
+    t5=Sort(insertion_sort,"insertion_sort")
     t1.start()
     t2.start()
     t3.start()
     t4.start()
+    t5.start()
 
 if __name__ == '__main__':
     main()
